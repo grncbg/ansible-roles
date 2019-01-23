@@ -1,0 +1,16 @@
+- name: create group
+  group:
+    name: "{{ username }}"
+    state: present
+
+- name: create user
+  user:
+    name: "{{ username }}"
+    createhome: yes
+    group: "{{ username }}"
+    password: "{{ password | password_hash('sha512') }}"
+    shell: /bin/bash
+    state: present
+    update_password: on_create
+    append: yes
+    groups: "{% if sudoer is defined and sudoer == true %} sudo {% endif %}"

@@ -1,0 +1,22 @@
+- name: input {{ var_name }}
+  pause:
+    prompt: "{{ text | default('Input ' + var_name ) }}"
+    echo: "{{ echo | default(True) }}"
+  register: tmp
+
+- block:
+    - name: reenter
+      pause:
+        prompt: "{{ confirm_text | default('Reenter ' + var_name) }}"
+        echo: "{{ echo | default(True) }}"
+      register: tmp2
+
+    - name: check
+      fail:
+        msg: Input do not match.
+      when: tmp.user_input != tmp2.user_input
+  when: confirm is defined and confirm == True
+
+- name: set fact
+  set_fact:
+    input: "{{ tmp.user_input }}"

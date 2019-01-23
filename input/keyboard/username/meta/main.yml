@@ -1,0 +1,3 @@
+---
+dependencies:
+  - { role: input/keyboard/var, var_name: username }
